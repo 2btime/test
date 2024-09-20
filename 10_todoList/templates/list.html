@@ -10,7 +10,7 @@
         {% for todo in todolist %}
         <tr>
             <td class="align-middle">
-                <input type="image" src="../static/images/{{todo['done']}}.png" width="30" alt="submit Me">
+                <a href="./done?_id={{todo['_id']}}"><input type="image" src="../static/images/{{todo['done']}}.png" width="30" alt="submit Me"></a>
             </td>
             <td>
                 <strong>{{todo["contents"]}}</strong><br>
@@ -25,11 +25,7 @@
             {% else %}
             <td class="align-middle"><span class="badge text-bg-danger align-middle p-2">{{todo["primary"]}}</span></td>
             {% endif %}
-<<<<<<< HEAD
-        </tr><br>
-=======
-        </tr><hr>
->>>>>>> testA
+        </tr>
         {% endfor %}
     </tbody>
 </table>

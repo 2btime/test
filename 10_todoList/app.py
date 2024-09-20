@@ -44,5 +44,37 @@ def action_add():
         todos.insert_one({"contents":contents, "date":date, "primary":primary, "done":"no"})
         return redirect('/')
 
+@app.route("/done")
+def done():
+    id = request.values.get("_id")
+    task = todos.find({"_id" : ObjectId(id)})
+    print(task[0])
+    print(task[0]["done"])
+    if(task[0]["done"]=="yes"):
+        todos.update_one({"_id":ObjectId(id)},{"$set":{"done":"no"}}) # yes이면 no로 변경
+    else:
+        todos.update_one({"_id":ObjectId(id)},{"$set":{"done":"yes"}})  # no이면 yes로 변경
+    print(task[0]["done"])
+    return """
+    <script>
+    window.location = document.referrer;
+    </script>"""
+
+# document.referrer: 이 속성은 현재 문서를 열기 전에 사용자가 방문했던 웹페이지의 URL을 반환합니다.
+
+@app.route("/active")
+def active():
+    stat = "Active list"
+    todolist = todos.find({"done":"no"}).sort('date', -1)       # 날짜 내림차순
+    form = TextForm()
+    return render_template('index.html', form=form, stat=stat, todolist=todolist)
+
+@app.route("/completed")
+def completed():
+    stat = "Completed list"
+    todolist = todos.find({"done":"yes"}).sort('date', -1)       # 날짜 내림차순
+    form = TextForm()
+    return render_template('index.html', form=form, stat=stat, todolist=todolist)
+
 if __name__ == '__main__':
     app.run(debug=True)
