@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+  <!-- <div class="container-fluid my-5">
+    <h2>Upload File!</h2>
+    <hr class="my-5">
+    <img src="../static/images/upload.png" alt="upload이미지" width="100">
+    <img src="{{url_for('static', filename='images/upload.png')}}", width="100">
+  </div> -->
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center my-5">
+        <form action="/" method="POST" enctype="multipart/form-data">
+          <!-- <input type="file" name="file" id="bfild" class="btn btn-secondary"> -->
+          {{ form.csrf_token() }}   <!-- 신사2 템플릿으로 csrf_token()을 불러옴 -->
+          {{ form.files(size=20, class="btn btn-secondary w-50") }} <!-- 파일을 올릴 수 있는 폼구성 -->
+          <input type="submit" class="btn btn-outline-dark py-2">
+        </form>
+      </div>
+    </div>
+    <div class="col-12 mt-5">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th><!-- 아이콘 --></th>
+            <th>이름</th>
+            <th></th>
+            <th>만든 날짜</th>
+            <th>마지막으로 수정한 날짜</th>
+            <th>파일 크기</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for info in infos %}
+          <tr>
+            <td class="badge rounded-pill text-bg-secondary">{{ info['name'].split('.')[1] }}</td>
+            <td><a href="down/{{info['name']}}" name="download">{{ info['name'] }}</a></td>
+            <td><a class="btn btn-outline-danger" href="del/{{info['name']}}" name="delete">삭제</a></td>
+            <td>{{ info['create'].strftime("%Y-%m-%d") }}</td>
+            <td>{{ info['modify'].strftime("%Y-%m-%d") }}</td>
+            <td>{{ info['size'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
